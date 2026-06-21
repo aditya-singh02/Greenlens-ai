@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
-  timeout: 10000,
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+    timeout: 10000,
 })
 
 export const fetchAllWards = async () => {
@@ -17,6 +17,11 @@ export const fetchWardById = async (id) => {
 
 export const fetchRecommendation = async (id) => {
   const res = await api.get(`/recommend/${id}`)
+  return res.data.data
+}
+
+export const fetchCityAQI = async () => {
+  const res = await api.get('/aqi')
   return res.data.data
 }
 
