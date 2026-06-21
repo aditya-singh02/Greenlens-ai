@@ -12,12 +12,12 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN, // Allow requests from the specified origin
     credentials: true
 }));
-
+app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 
 app.use(cookieParser());
 
-app.use('/api/v1', wardRoutes);
+app.use('/api', wardRoutes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500

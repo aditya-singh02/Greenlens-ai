@@ -9,33 +9,9 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, Cell
 } from 'recharts'
 import StressBadge from '../components/Stressbadge'
-import { fetchWardById, fetchRecommendation } from '../utils/api'
+import { fetchWardById, fetchRecommendation, fetchCityAQI   } from '../utils/api.js'
 
-// Mock single ward
-function mockWard(id) {
-  const names = ['Sirpur', 'Tejaji Nagar', 'Sudama Nagar', 'Rajendra Nagar', 'Nehru Nagar']
-  return {
-    wardId: id,
-    wardName: names[id % names.length],
-    stressLevel: ['Critical', 'High', 'Moderate', 'Low'][id % 4],
-    stressScore: 30 + (id * 7) % 65,
-    densityClass: ['High', 'High-Medium', 'Low-Medium', 'Low'][id % 4],
-    densityPerSqKm: 8000 + id * 500,
-    population2011: 12000 + id * 800,
-    population2021: 15000 + id * 900,
-    population2024: 16000 + id * 950,
-    population2029: 18000 + id * 1100,
-    populationGrowthPercent: 15 + id % 20,
-    perCapitaOpenSpace_m2: 2 + (id % 15),
-    totalOpenSpace_m2: 25000 + id * 1000,
-    greenSpaceCategory: ['Critical', 'Below Standard', 'Near Standard', 'Above Standard'][id % 4],
-    greenRiskScore: 20 + (id * 6) % 70,
-    waterGap2029: 0.5 + (id % 12),
-    coveragePercent: 40 + (id % 45),
-    vacantLand: 0.5 + (id % 5),
-    recommendedTrees: 200 + id * 50,
-  }
-}
+
 
 function DataRow({ label, value, highlight }) {
   return (
@@ -47,20 +23,34 @@ function DataRow({ label, value, highlight }) {
 }
 
 export default function WardDetailPage() {
-  const { id } = useParams()
-  const [ward, setWard] = useState(null)
-  const [rec, setRec] = useState(null)
-  const [loadingWard, setLoadingWard] = useState(true)
-  const [loadingRec, setLoadingRec] = useState(false)
-  const [recError, setRecError] = useState(null)
+    const { id } = useParams();
+ const [ward, setWard] = useState(null);
+ const [wardError, setWardError] = useState(null);
+ const [aqi, setAqi] = useState(null);
+ const [rec, setRec] = useState(null);
+ const [loadingWard, setLoadingWard] = useState(true);
+ const [loadingRec, setLoadingRec] = useState(false);
+ const [recError, setRecError] = useState(null);
 
-  useEffect(() => {
-    setLoadingWard(true)
-    fetchWardById(id)
-      .then(setWard)
-      .catch(() => setWard(mockWard(Number(id))))
-      .finally(() => setLoadingWard(false))
-  }, [id])
+ useEffect(() => {
+   setLoadingWard(true);
+   setWardError(null);
+   fetchWardById(id)
+     .then(setWard)
+     .catch(() =>
+       setWardError(
+         "Could not load this ward. Check that the backend is running and this ward exists.",
+       ),
+     )
+     .finally(() => setLoadingWard(false));
+ }, [id]);
+
+ useEffect(() => {
+   fetchCityAQI()
+     .then(setAqi)
+     .catch(() => setAqi(null));
+ }, []);
+
 
   const loadRec = () => {
     setLoadingRec(true)
@@ -81,6 +71,23 @@ export default function WardDetailPage() {
       </div>
     )
   }
+
+    if (wardError) {
+      return (
+        <div className="min-h-screen bg-mist pt-20 flex items-center justify-center px-4">
+          <div className="text-center max-w-md">
+            <AlertTriangle size={32} className="text-red-400 mx-auto mb-4" />
+            <p className="text-forest-700 font-medium mb-1">{wardError}</p>
+            <Link
+              to="/dashboard"
+              className="text-sm text-forest-500 hover:text-forest-700 underline mt-2 inline-block"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+        </div>
+      );
+    }
 
   if (!ward) return null
 
@@ -149,12 +156,13 @@ export default function WardDetailPage() {
           {/* Left column: data */}
           <div className="lg:col-span-2 space-y-6">
             {/* Key metrics */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
               {[
                 { icon: Users, label: 'Pop 2029', value: ward.population2029?.toLocaleString() || '—', color: 'forest' },
                 { icon: TreePine, label: 'm²/person', value: ward.perCapitaOpenSpace_m2?.toFixed(1) || '—', color: ward.perCapitaOpenSpace_m2 >= 9 ? 'forest' : 'red' },
                 { icon: Droplets, label: 'Water gap', value: `${ward.waterGap2029?.toFixed(1) || '—'} MLD`, color: 'blue' },
                 { icon: Leaf, label: 'Vacant land', value: `${ward.vacantLand?.toFixed(1) || '—'} ha`, color: 'forest' },
+                { icon: AlertTriangle, label: 'City AQI', value: aqi ? `${aqi.aqi}` : '—', color: aqi && aqi.aqi > 200 ? 'red' : 'amber' },                
               ].map(({ icon: Icon, label, value, color }) => (
                 <div key={label} className="glass-card p-4">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center mb-2 ${
@@ -169,6 +177,11 @@ export default function WardDetailPage() {
                 </div>
               ))}
             </div>
+            {aqi && (
+              <p className="text-xs text-forest-400 -mt-2">
+                ℹ️ AQI is a live city-wide reading ({aqi.category}, {aqi.stationsUsed} stations) — ward-specific air quality data isn't available yet.
+              </p>
+            )}
 
             {/* Population chart */}
             <div className="glass-card p-5">

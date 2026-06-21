@@ -86,8 +86,9 @@ export const processedWardData = wards.map((ward) => {
     growthRisk * 0.2
   );
 
-  const stressLevel = stressScore > 65 ? 'Critical' :
-    stressScore > 40 ? 'Moderate' : 'Stable';
+  const stressLevel = stressScore > 70 ? 'Critical' :
+    stressScore > 55 ? 'High' :
+      stressScore > 35 ? 'Moderate' : 'Low';
 
   // Vacant land — outskirt wards mein zyada
   const vacantLand = ward.densityClass === 'Low' ? 2.5 :
@@ -123,8 +124,9 @@ export const processedWardData = wards.map((ward) => {
 export const citySummary = {
   totalWards: processedWardData.length,
   criticalWards: processedWardData.filter(w => w.stressLevel === 'Critical').length,
+  highWards: processedWardData.filter(w => w.stressLevel === 'High').length,
   moderateWards: processedWardData.filter(w => w.stressLevel === 'Moderate').length,
-  stableWards: processedWardData.filter(w => w.stressLevel === 'Stable').length,
+  lowWards: processedWardData.filter(w => w.stressLevel === 'Low').length,
   totalTrees: processedWardData.reduce((s, w) => s + w.recommendedTrees, 0),
   wardsBelowURDPFI: wardGreeneryData.filter(
     w => w.perCapitaOpenSpace_m2 !== null && w.perCapitaOpenSpace_m2 < 12
