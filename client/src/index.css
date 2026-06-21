@@ -1,1 +1,85 @@
-/* index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: #f0fdf4;
+    color: #1a2e1a;
+  }
+  h1, h2, h3, h4, h5 {
+    font-family: 'Sora', Inter, sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-sm border border-green-100 rounded-2xl shadow-sm;
+  }
+  .btn-primary {
+    @apply bg-forest-600 hover:bg-forest-700 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-ghost {
+    @apply border border-forest-200 hover:border-forest-400 text-forest-700 hover:bg-forest-50 font-medium px-5 py-2.5 rounded-xl transition-all duration-200;
+  }
+  .stress-critical {
+    @apply bg-red-50 text-red-700 border-red-200;
+  }
+  .stress-high {
+    @apply bg-orange-50 text-orange-700 border-orange-200;
+  }
+  .stress-moderate {
+    @apply bg-amber-50 text-amber-700 border-amber-200;
+  }
+  .stress-low {
+    @apply bg-green-50 text-green-700 border-green-200;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f0fdf4; }
+::-webkit-scrollbar-thumb { background: #86efac; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #4aba4a; }
+
+/* Leaf particle animation */
+@keyframes float-leaf {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+  50% { transform: translateY(-15px) rotate(10deg); opacity: 1; }
+}
+.leaf-float { animation: float-leaf 4s ease-in-out infinite; }
+.leaf-float-delay { animation: float-leaf 4s ease-in-out infinite 1.5s; }
+.leaf-float-slow { animation: float-leaf 6s ease-in-out infinite 0.8s; }
+
+/* Leaflet ward map theming */
+.leaflet-container {
+  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: 1rem;
+}
+.ward-tooltip {
+  background: white;
+  border: 1px solid #dcfce7;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(17, 66, 17, 0.12);
+  padding: 8px 10px;
+}
+.ward-tooltip::before {
+  border-top-color: #dcfce7 !important;
+}
+.ward-tooltip-title {
+  font-weight: 600;
+  font-size: 12.5px;
+  color: #114211;
+  margin-bottom: 2px;
+}
+.ward-tooltip-row {
+  font-size: 11.5px;
+  color: #4d7a4d;
+}
+.ward-tooltip-muted {
+  color: #9ca3af;
+}
