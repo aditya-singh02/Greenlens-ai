@@ -5,12 +5,20 @@ const wardSchema = new mongoose.Schema({
     wardName: String,
     densityClass: String,
     densityPerSqKm: Number,
+    population2011: Number,
     population2021: Number,
+    population2024: Number,
     population2029: Number,
     populationGrowthPercent: Number,
-    greenCover: Number,
-    coveragePercent: Number,
+    // Real green fields
+    perCapitaOpenSpace_m2: Number,
+    totalOpenSpace_m2: Number,
+    greenSpaceCategory: String,
+    // Water
     waterGap2029: Number,
+    coveragePercent: Number,
+    // Scores
+    greenRiskScore: Number,
     stressScore: Number,
     stressLevel: String,
     vacantLand: Number,
