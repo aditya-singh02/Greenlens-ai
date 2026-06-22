@@ -94,10 +94,7 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="pt-2">
-            <Link
-              to="/dashboard"
-              className="btn-primary block text-center text-sm"
-            >
+            <Link to="/wards" className="btn-primary block text-center text-sm">
               View Wards
             </Link>
           </div>
