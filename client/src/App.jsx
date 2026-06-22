@@ -5,6 +5,7 @@ import LandingPage from './pages/LandingPage'
 import DashboardPage from './pages/DashboardPage'
 import WardDetailPage from './pages/WardDetailPage'
 import AboutPage from './pages/AboutPage'
+import AllWardsPage from "./pages/AllWardsPage";
 
 export default function App() {
   return (
@@ -16,9 +17,10 @@ export default function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/ward/:id" element={<WardDetailPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/wards" element={<AllWardsPage />} />
         </Routes>
       </main>
       <Footer />
     </div>
-  )
+  );
 }

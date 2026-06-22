@@ -7,7 +7,7 @@ import {getIndoreAQI} from '../services/openaq.service.js'
 // GET /api/wards — sabhi wards
 export const getAllWards = asyncHandler(async (req, res) => {
     const wards = await Ward.find().select(
-        'wardId wardName densityClass stressLevel stressScore greenCover population2029'
+        'wardId wardName densityClass stressLevel stressScore perCapitaOpenSpace_m2 waterGap2029 greenCover population2029'
     )
     return res.json(new ApiResponse(200, wards, 'Wards fetched'))
 })
