@@ -45,7 +45,7 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-forest-700 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-forest-400">
-            © 2025 GreenLens AI · Built for Green Tech Hackathon · Indore, India
+            © 2026 GreenLens AI · Built for Green Tech Hackathon · Indore, India
           </p>
           <div className="flex items-center gap-1.5 text-xs text-forest-400">
             <Leaf size={12} className="text-leaf" />
